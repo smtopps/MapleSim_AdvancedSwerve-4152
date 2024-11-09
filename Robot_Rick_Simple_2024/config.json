@@ -1,0 +1,61 @@
+{
+    "name": "Rick Simple 2024",
+    "rotations": [
+      {
+        "axis": "x",
+        "degrees": 90
+      },
+      {
+        "axis": "y",
+        "degrees": 0
+      },
+      {
+        "axis": "z",
+        "degrees": 270
+      }
+    ],
+    "position": [0, 0, 0],
+    "cameras": [
+      {
+        "name": "limelight-shooter",
+        "rotations": [
+          {
+            "axis": "x",
+            "degrees": 0
+          },
+          {
+            "axis": "y",
+            "degrees": -24
+          },
+          {
+            "axis": "z",
+            "degrees": 180
+          }
+        ],
+        "position": [-0.152, 0, 0.616708],
+        "resolution": [1280, 960],
+        "fov": 62.5
+      },
+      {
+        "name": "limelight-intake",
+        "rotations": [
+          {
+            "axis": "x",
+            "degrees": 0
+          },
+          {
+            "axis": "y",
+            "degrees": 18
+          },
+          {
+            "axis": "z",
+            "degrees": 0
+          }
+        ],
+        "position": [-0.059992, 0, 0.556861],
+        "resolution": [640, 480],
+        "fov": 62.5
+      }
+    ],
+    "components": []
+  }

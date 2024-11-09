@@ -14,9 +14,14 @@ public class ShooterIOTalonFX implements ShooterIO {
   private TalonFX shootLeft = new TalonFX(ShooterConstants.leftShooterMotorID);
   private TalonFX shootRight = new TalonFX(ShooterConstants.rightShooterMotorID);
   final VelocityVoltage voltageRequest = new VelocityVoltage(0);
+  private double leftSetpoint;
+  private double rightSetpoint;
 
   @Override
-  public void updateInputs(ShooterInputs inputs) {}
+  public void updateInputs(ShooterInputs inputs) {
+    inputs.leftVelocitySetpoint = leftSetpoint;
+    inputs.rightVelocitySetpoint = rightSetpoint;
+  }
 
   public void configShooterMotors() {
     shootLeft.getConfigurator().apply(new TalonFXConfiguration());
@@ -33,8 +38,10 @@ public class ShooterIOTalonFX implements ShooterIO {
   }
 
   public void setShooterSpeeds(double RPS, double spinFactor) {
-    shootLeft.setControl(voltageRequest.withVelocity(RPS * (1 - spinFactor)));
-    shootRight.setControl(voltageRequest.withVelocity(RPS * (1 + spinFactor)));
+    leftSetpoint = RPS * (1 - spinFactor);
+    shootLeft.setControl(voltageRequest.withVelocity(leftSetpoint));
+    rightSetpoint = RPS * (1 + spinFactor);
+    shootRight.setControl(voltageRequest.withVelocity(rightSetpoint));
   }
 
   public void stopShooter() {

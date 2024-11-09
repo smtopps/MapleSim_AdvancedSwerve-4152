@@ -25,9 +25,16 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.AutoCommands.AutoAlignNotes;
+import frc.robot.commands.AutoCommands.AutoIntakeStart;
+import frc.robot.commands.AutoCommands.AutoIntakeStop;
+import frc.robot.commands.AutoCommands.AutoManualShoot;
+import frc.robot.commands.AutoCommands.AutoShootDeflect;
+import frc.robot.commands.AutoCommands.AutoShootOnTheFly;
+import frc.robot.commands.AutoCommands.AutoShootPose;
 import frc.robot.commands.IntakeCommands.IntakeAlignAndDriveToNote;
 import frc.robot.commands.IntakeCommands.IntakeAmp;
 import frc.robot.commands.IntakeCommands.IntakeGround;
@@ -36,6 +43,7 @@ import frc.robot.commands.ShootCommands.RevShooter;
 import frc.robot.commands.ShootCommands.ShootDeflect;
 import frc.robot.commands.ShootCommands.ShootPose;
 import frc.robot.commands.ShootCommands.ShootToZone;
+import frc.robot.commands.TrapAmpCommands.AlignAmpSequence;
 import frc.robot.commands.TrapAmpCommands.AmpSequence;
 import frc.robot.subsystems.ElevatorTrap.ElevatorTrap;
 import frc.robot.subsystems.ElevatorTrap.ElevatorTrapIO;
@@ -62,7 +70,6 @@ import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation.DRIVE_WHEEL_TYPE;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -86,8 +93,6 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
-  private final LoggedDashboardNumber shooterSpeedInput =
-      new LoggedDashboardNumber("Shooter Speed", 1500.0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -155,6 +160,8 @@ public class RobotContainer {
         /* other subsystems are created with hardware simulation IOs */
         final ShooterIOSim shooterIOSim = new ShooterIOSim();
         shooter = new Shooter(shooterIOSim);
+        this.elevatorTrap = new ElevatorTrap(new ElevatorTrapIOSim());
+        this.climber = new Climber(new ClimberIOSim());
 
         this.intake =
             new Intake(
@@ -164,10 +171,9 @@ public class RobotContainer {
                         shooterIOSim.shootNoteWithCurrentRPM(
                             swerveDriveSimulation.getSimulatedDriveTrainPose(),
                             swerveDriveSimulation
-                                .getDriveTrainSimulatedChassisSpeedsFieldRelative())));
+                                .getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                            elevatorTrap.getElevatorPosition())));
         // simulation
-        this.elevatorTrap = new ElevatorTrap(new ElevatorTrapIOSim());
-        this.climber = new Climber(new ClimberIOSim());
         break;
 
       default:
@@ -191,26 +197,16 @@ public class RobotContainer {
     }
 
     // Set up auto routines
-    NamedCommands.registerCommand(
-        "Run Shooter",
-        Commands.startEnd(
-                () -> shooter.setShooterSpeeds(shooterSpeedInput.get(), 0),
-                shooter::stopShooter,
-                shooter)
-            .withTimeout(5.0));
+    NamedCommands.registerCommand("startIntake", new AutoIntakeStart(intake));
+    NamedCommands.registerCommand("stopIntake", new AutoIntakeStop(intake));
+    NamedCommands.registerCommand("autoShoot", new AutoShootPose(drive, shooter, intake));
+    NamedCommands.registerCommand("autoIntake", new PrintCommand("autoIntake"));
+    NamedCommands.registerCommand("autoShootAlign", new PrintCommand("autoShootAlign"));
+    NamedCommands.registerCommand("autoAlign", new AutoAlignNotes(drive, intake));
+    NamedCommands.registerCommand("deflect", new AutoShootDeflect(shooter, intake, elevatorTrap));
+    NamedCommands.registerCommand("manuelShoot", new AutoManualShoot(shooter, intake));
+    NamedCommands.registerCommand("moveShoot", new AutoShootOnTheFly(drive, shooter, intake));
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-
-    // Set up SysId routines
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Forward)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Reverse)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -263,9 +259,9 @@ public class RobotContainer {
         .whileTrue(new ShootPose(drive, shooter, intake).ignoringDisable(true));
     driverController.y().whileTrue(new IntakeAmp(intake));
     driverController.b().onTrue(new AmpSequence(elevatorTrap, intake, shooter));
-    // driverController.rightStick().whileTrue(new AlignAmpSequence(intake, drivetrain, elevator,
-    // shooter, trap).deadlineWith(new InstantCommand(()->leds.setLED(0, 0, 255, 8, 64),
-    // leds)).ignoringDisable(true));
+    driverController
+        .rightStick()
+        .whileTrue(new AlignAmpSequence(intake, drive, elevatorTrap, shooter));
     driverController.a().whileTrue(new ShootDeflect(shooter, intake, elevatorTrap));
     driverController
         .leftStick()

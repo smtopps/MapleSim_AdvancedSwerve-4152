@@ -5,6 +5,7 @@
 package frc.robot.subsystems.climber;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -13,9 +14,11 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 
 /** Add your docs here. */
 public class ClimberIOSim implements ClimberIO {
+  private boolean isPositionMode = true;
   private double climberPosition;
   private double climberPower;
   private ElevatorSim climberArmSim;
+  private PIDController climberController = new PIDController(0.1, 0, 0);
 
   public ClimberIOSim() {
     climberArmSim =
@@ -32,7 +35,7 @@ public class ClimberIOSim implements ClimberIO {
 
   @Override
   public void updateInputs(ClimberInputs inputs) {
-    climberArmSim.setInputVoltage(climberPower);
+    climberArmSim.setInputVoltage(climberPower * 12);
     climberArmSim.update(0.02);
 
     double climberPosition =
@@ -58,7 +61,9 @@ public class ClimberIOSim implements ClimberIO {
 
   public void setClimberPosition(double position) {}
 
-  public void configureMotorsControllers() {}
+  public void configureMotorsControllers() {
+    climberPosition = 0.0;
+  }
 
   public void resetEncoder(boolean stop) {}
 }

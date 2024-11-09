@@ -12,6 +12,8 @@ public interface ShooterIO {
   class ShooterInputs {
     public double leftVelocityRPS = 0.0;
     public double rightVelocityRPS = 0.0;
+    public double leftVelocitySetpoint = 0.0;
+    public double rightVelocitySetpoint = 0.0;
   }
 
   /** Updates the set of loggable inputs. */

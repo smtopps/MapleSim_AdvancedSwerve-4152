@@ -1,16 +1,32 @@
-# Advantage Kit - Advanced Swerve Drive Project
+# FRC 4152 Rick
 
-### With more enhanced swerve drive simulation using [maple-sim](https://github.com/Shenzhen-Robotics-Alliance/maple-sim).
-Original Project is [here](https://www.chiefdelphi.com/t/advantagekit-2024-log-replay-again/442968/54).
+### 2024 Robot With AdvantageKit and MapleSim Simulation
 
-To use the simulation in your own project, please refer to this [Commit Change-Log](https://github.com/Shenzhen-Robotics-Alliance/maple-sim/commit/1667aa80170e6733d8eaee866da0297e762402fa).
-To see how to simulate intake for your robot, please refer to this [Intake Example](https://github.com/Shenzhen-Robotics-Alliance/maple-sim/blob/main/templates/AdvantageKit_AdvancedSwerveDriveProject/src/main/java/frc/robot/subsystems/IntakeExample.java).
+![Robot Image](/assets/_MG_2139.jpg)
 
-When running the simulation, you can see the simulation results through AdvantageScope, please drag the following fields:
+---
 
-- Open field `AdvantageKit/RealOutputs/FieldSimulation/RobotPosition` make it `2024 KitBot`
+Swerve based on original project [here](https://www.chiefdelphi.com/t/advantagekit-2024-log-replay-again/442968/54).
+
+## Highlights
+- 5 note auto
+- 7 Best Endgame EPA on statbotics
+
+## Using Simulation
+When running the simulation, you can see the simulation results through AdvantageScope
+
+- Add `/Robot_Rick_2024` to AdvantageScope assets folder
+- Add `/Robot_Rick_Simple_2024` to AdvantageScope assets folder
+- Ensure `/src/java/frc/robot/Constants.java` currentMode is set to Mode.SIM
+- Run code in simulation.
+
+Please drag the following fields:
+
+- Open field `AdvantageKit/RealOutputs/FieldSimulation/RobotPosition` make it `Robot/Rick 2024`
+- Open field `AdvantageKit/RealOutputs/Intake/IntakePose` make it component 1 of `Robot/Rick 2024`
+- Open field `AdvantageKit/RealOutputs/Climber/ClimberPose` make it component 2 of `Robot/Rick 2024`
+- Open field `AdvantageKit/RealOutputs/ElevatorTrap/ElevatorStage2Pose` make it component 3 of `Robot/Rick 2024`
+- Open field `AdvantageKit/RealOutputs/ElevatorTrap/ElevatorStage3Pose` make it component 4 of `Robot/Rick 2024`
 - Open field `AdvantageKit/RealOutputs/FieldSimulation/Notes` and make it `Note`
 - Open field `AdvantageKit/RealOutputs/Intake/NoteInIntake` and make it `Note`
-- Open field `AdvantageKit/RealOutputs/Odometry/Robot` and make it `Green Ghost`
-
-Now you can drive the robot around and try grabbing notes with left trigger, and clear the note in intake with left bumper.
+- Open field `AdvantageKit/RealOutputs/Odometry/Robot` and make it `Green Ghost/Rick Simple 2024`

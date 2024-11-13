@@ -42,14 +42,16 @@ public class AutoShootDeflect extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(shooter.isShooterAtSpeed(ShooterConstants.deflectRPS, 0.0) && elevatorTrap.isElevatorAtPosition(ElevatorConstants.ShootDeflect) && intake.isIntakeAtPosition(IntakeConstants.shootPosition)) {
+    if (shooter.isShooterAtSpeed(ShooterConstants.deflectRPS, 0.0)
+        && elevatorTrap.isElevatorAtPosition(ElevatorConstants.ShootDeflect)
+        && intake.isIntakeAtPosition(IntakeConstants.shootPosition)) {
       intake.setRollerSpeed(IntakeConstants.shootSpeed);
-      if(timeStampLock){
+      if (timeStampLock) {
         shootTime = Timer.getFPGATimestamp();
         timeStampLock = false;
       }
 
-      if(!timeStampLock && Timer.getFPGATimestamp() - shootTime > 0.2){
+      if (!timeStampLock && Timer.getFPGATimestamp() - shootTime > 0.2) {
         finished = true;
       }
     }

@@ -42,7 +42,7 @@ public class AutoShootOnTheFly extends Command {
   public void initialize() {
     shooter.setShooterSpeeds(speed, spin);
     intake.setIntakePosition(IntakeConstants.shootPosition);
-    targetTag = DriverStation.getAlliance().get()==DriverStation.Alliance.Blue?7:4;
+    targetTag = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? 7 : 4;
     targetPose = ShooterConstants.aprilTags.getTagPose(targetTag).get().toPose2d();
     timeStampLock = true;
     finished = false;
@@ -54,14 +54,16 @@ public class AutoShootOnTheFly extends Command {
     Pose2d currentPose = drivetrain.getPose();
     distanceToTarget = currentPose.getTranslation().getDistance(targetPose.getTranslation());
 
-    if(intake.isIntakeAtPosition(IntakeConstants.shootPosition) && shooter.isShooterAtSpeed(ShooterConstants.shootingRPS, ShooterConstants.spinFactor) && distanceToTarget < Units.inchesToMeters(180.0)) {
+    if (intake.isIntakeAtPosition(IntakeConstants.shootPosition)
+        && shooter.isShooterAtSpeed(ShooterConstants.shootingRPS, ShooterConstants.spinFactor)
+        && distanceToTarget < Units.inchesToMeters(180.0)) {
       intake.setRollerSpeed(IntakeConstants.shootSpeed);
-      if(timeStampLock){
+      if (timeStampLock) {
         shootTime = Timer.getFPGATimestamp();
         timeStampLock = false;
       }
 
-      if(!timeStampLock && Timer.getFPGATimestamp() - shootTime > 0.2){
+      if (!timeStampLock && Timer.getFPGATimestamp() - shootTime > 0.2) {
         finished = true;
       }
     }

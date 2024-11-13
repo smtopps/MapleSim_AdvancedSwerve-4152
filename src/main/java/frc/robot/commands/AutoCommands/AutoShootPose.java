@@ -51,11 +51,11 @@ public class AutoShootPose extends Command {
   public void initialize() {
     shooter.setShooterSpeeds(ShooterConstants.shootingRPS, ShooterConstants.spinFactor);
     intake.setIntakePosition(IntakeConstants.shootPosition);
-    targetTag = DriverStation.getAlliance().get()==DriverStation.Alliance.Blue?7:4;
+    targetTag = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? 7 : 4;
     yawController.setSetpoint(180.0);
     yawController.setTolerance(2.0);
     yawController.enableContinuousInput(-180, 180);
-    distanceController.setSetpoint(2.95); //3.0
+    distanceController.setSetpoint(2.95); // 3.0
     distanceController.setTolerance(Units.inchesToMeters(2.0));
     targetPose = ShooterConstants.aprilTags.getTagPose(targetTag).get().toPose2d();
     timeStampLock = true;
@@ -73,26 +73,30 @@ public class AutoShootPose extends Command {
     double yawSpeed = yawController.calculate(-rotationToTarget.getDegrees());
     yawSpeed = MathUtil.clamp(yawSpeed, -3.8, 3.8);
     double distanceSpeed;
-    if(Math.abs(yawController.getError()) < 10.0) {
-      distanceSpeed = distanceController.calculate(distanceToTarget); 
+    if (Math.abs(yawController.getError()) < 10.0) {
+      distanceSpeed = distanceController.calculate(distanceToTarget);
       distanceSpeed = MathUtil.clamp(distanceSpeed, -4.0, 4.0);
-    }else{
+    } else {
       distanceSpeed = 0.0;
     }
 
     drivetrain.runVelocity(new ChassisSpeeds(distanceSpeed, 0, yawSpeed));
-    
-    if(yawController.atSetpoint() && distanceController.atSetpoint() && intake.isIntakeAtPosition(IntakeConstants.shootPosition) && shooter.isShooterAtSpeed(ShooterConstants.shootingRPS, ShooterConstants.spinFactor)) {
+
+    if (yawController.atSetpoint()
+        && distanceController.atSetpoint()
+        && intake.isIntakeAtPosition(IntakeConstants.shootPosition)
+        && shooter.isShooterAtSpeed(ShooterConstants.shootingRPS, ShooterConstants.spinFactor)) {
       intake.setRollerSpeed(IntakeConstants.shootSpeed);
-      if(timeStampLock){
+      if (timeStampLock) {
         shootTime = Timer.getFPGATimestamp();
         timeStampLock = false;
       }
 
-      if(!timeStampLock && Timer.getFPGATimestamp() - shootTime > 0.2){
+      if (!timeStampLock && Timer.getFPGATimestamp() - shootTime > 0.2) {
         finished = true;
       }
-    };
+    }
+    ;
   }
 
   // Called once the command ends or is interrupted.

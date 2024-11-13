@@ -4,16 +4,14 @@
 
 package frc.robot.commands.AutoCommands;
 
-import java.util.Optional;
-
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.util.LimelightHelpers;
+import java.util.Optional;
 
 public class AutoAlignNotes extends Command {
   private final Drive drivetrain;
@@ -35,13 +33,13 @@ public class AutoAlignNotes extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(LimelightHelpers.getTV("limelight-intake")){
+    if (LimelightHelpers.getTV("limelight-intake")) {
       double limelighMeasurement = LimelightHelpers.getTX("limelight-intake");
       limelighMeasurement = MathUtil.inverseInterpolate(-31.25, 31.25, limelighMeasurement);
       limelighMeasurement = MathUtil.interpolate(-20, 20, limelighMeasurement);
-      double rotation = drivetrain.getPose().getRotation().getDegrees()-limelighMeasurement;
+      double rotation = drivetrain.getPose().getRotation().getDegrees() - limelighMeasurement;
       Rotation2d rotationTarget = Rotation2d.fromDegrees(rotation);
-      PPHolonomicDriveController.setRotationTargetOverride(()-> Optional.of(rotationTarget));
+      PPHolonomicDriveController.setRotationTargetOverride(() -> Optional.of(rotationTarget));
     }
   }
 

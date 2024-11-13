@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.DriveCommands;
 import frc.robot.commands.AutoCommands.AutoAlignNotes;
 import frc.robot.commands.AutoCommands.AutoIntakeStart;
 import frc.robot.commands.AutoCommands.AutoIntakeStop;
@@ -35,6 +34,7 @@ import frc.robot.commands.AutoCommands.AutoManualShoot;
 import frc.robot.commands.AutoCommands.AutoShootDeflect;
 import frc.robot.commands.AutoCommands.AutoShootOnTheFly;
 import frc.robot.commands.AutoCommands.AutoShootPose;
+import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeCommands.IntakeAlignAndDriveToNote;
 import frc.robot.commands.IntakeCommands.IntakeAmp;
 import frc.robot.commands.IntakeCommands.IntakeGround;
@@ -62,6 +62,10 @@ import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOTalonFX;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOLimelight;
+import frc.robot.subsystems.vision.VisionIOPhotonSim;
 import java.util.List;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.GyroSimulation;
@@ -87,6 +91,7 @@ public class RobotContainer {
   private final Intake intake;
   private final ElevatorTrap elevatorTrap;
   private final Climber climber;
+  private final Vision vision;
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -115,6 +120,7 @@ public class RobotContainer {
         this.intake = new Intake(new IntakeIOTalonFX());
         elevatorTrap = new ElevatorTrap(new ElevatorTrapIOReal());
         climber = new Climber(new ClimberIOReal());
+        vision = new Vision(new VisionIOLimelight(), drive);
         break;
 
       case SIM:
@@ -173,6 +179,7 @@ public class RobotContainer {
                             swerveDriveSimulation
                                 .getDriveTrainSimulatedChassisSpeedsFieldRelative(),
                             elevatorTrap.getElevatorPosition())));
+        this.vision = new Vision(new VisionIOPhotonSim(swerveDriveSimulation), drive);
         // simulation
         break;
 
@@ -193,6 +200,7 @@ public class RobotContainer {
         this.intake = new Intake((inputs) -> {});
         elevatorTrap = new ElevatorTrap(new ElevatorTrapIO() {});
         climber = new Climber(new ClimberIO() {});
+        vision = new Vision(new VisionIO() {}, drive);
         break;
     }
 
@@ -227,7 +235,6 @@ public class RobotContainer {
             () -> -driverController.getRightX()));
     shooter.setDefaultCommand(
         new RevShooter(drive, shooter).onlyWhile(() -> DriverStation.isTeleop()));
-    // driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     driverController
         .x()
         .onTrue(

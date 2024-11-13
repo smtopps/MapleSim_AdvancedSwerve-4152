@@ -40,16 +40,16 @@ public class AutoManualShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(shooter.isShooterAtSpeed(speed, spin) && intake.isIntakeAtPosition(IntakeConstants.shootPosition)) 
-    {
+    if (shooter.isShooterAtSpeed(speed, spin)
+        && intake.isIntakeAtPosition(IntakeConstants.shootPosition)) {
 
       intake.setRollerSpeed(IntakeConstants.shootSpeed);
-      if(timeStampLock){
+      if (timeStampLock) {
         shootTime = Timer.getFPGATimestamp();
         timeStampLock = false;
       }
 
-      if(!timeStampLock && Timer.getFPGATimestamp() - shootTime > 0.4){
+      if (!timeStampLock && Timer.getFPGATimestamp() - shootTime > 0.4) {
         finished = true;
       }
     }

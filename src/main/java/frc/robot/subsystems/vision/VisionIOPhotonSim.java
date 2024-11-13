@@ -155,46 +155,7 @@ public class VisionIOPhotonSim implements VisionIO {
       table
           .getEntry("botpose_orb_wpiblue")
           .setDoubleArray(pose_data.stream().mapToDouble(Double::doubleValue).toArray());
-    } /*else if (result.hasTargets()) {
-        Transform3d best = result.getBestTarget().getBestCameraToTarget().plus(robotToCamera.inverse());
-        Pose2d fieldToCamera =
-            new Pose2d(
-                best.getTranslation().plus(robotToCameraTrl).toTranslation2d(),
-                best.getRotation().plus(robotToCameraRot).toRotation2d());
-        List<Double> pose_data =
-            new ArrayList<>(
-                Arrays.asList(
-                    best.getX(), // 0: X
-                    best.getY(), // 1: Y
-                    best.getZ(), // 2: Z
-                    0.0, // 3: roll
-                    0.0, // 4: pitch
-                    fieldToCamera.getRotation().getDegrees(), // 5: yaw
-                    result.metadata.getLatencyMillis(), // 6: latency ms
-                    (double) result.targets.size(), // 7: tag count
-                    0.0, // 8: tag span
-                    0.0, // 9: tag dist
-                    result.getBestTarget().getArea() // 10: tag area
-                    ));
-        // Add RawFiducials
-        // This is super inefficient but it's sim only, who cares.
-        for (var target : result.targets) {
-          pose_data.add((double) target.getFiducialId()); // 0: id
-          pose_data.add(target.getYaw()); // 1: txnc
-          pose_data.add(target.getPitch()); // 2: tync
-          pose_data.add(0.0); // 3: ta
-          pose_data.add(0.0); // 4: distToCamera
-          pose_data.add(0.0); // 5: distToRobot
-          pose_data.add(0.5); // 6: ambiguity
-        }
-
-        table
-            .getEntry("botpose_wpiblue")
-            .setDoubleArray(pose_data.stream().mapToDouble(Double::doubleValue).toArray());
-        table
-            .getEntry("botpose_orb_wpiblue")
-            .setDoubleArray(pose_data.stream().mapToDouble(Double::doubleValue).toArray());
-      }*/ else {
+    } else {
         List<Double> pose_data =
             new ArrayList<>(
                 Arrays.asList(
@@ -218,7 +179,7 @@ public class VisionIOPhotonSim implements VisionIO {
         pose_data.add(0.0); // 3: ta
         pose_data.add(0.0); // 4: distToCamera
         pose_data.add(0.0); // 5: distToRobot
-        pose_data.add(0.5); // 6: ambiguity
+        pose_data.add(0.0); // 6: ambiguity
 
         table
             .getEntry("botpose_wpiblue")

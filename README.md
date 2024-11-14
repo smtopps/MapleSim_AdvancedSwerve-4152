@@ -15,8 +15,9 @@ Swerve based on original project [here](https://www.chiefdelphi.com/t/advantagek
 ## Using Simulation
 When running the simulation, you can see the simulation results through AdvantageScope
 
-- Add `/Robot_Rick_2024` to AdvantageScope assets folder
-- Add `/Robot_Rick_Simple_2024` to AdvantageScope assets folder
+- Add `/assets/Robot_Rick_2024` to AdvantageScope assets folder
+- Add `/assets/Robot_Rick_Simple_2024` to AdvantageScope assets folder
+- Included AdvantageScope Layout `/assets/AdvantageScope Layout.json`
 - Ensure `/src/java/frc/robot/Constants.java` currentMode is set to Mode.SIM
 - Run code in simulation.
 

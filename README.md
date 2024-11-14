@@ -48,3 +48,7 @@ Please drag the following fields:
 - B: Score the amp with manual alignment.
 - X: Reset Pose Estimation.
 - Y: Shoot note out of intake. Used mainly for a 2 notes stuck in the intake.
+
+### Operator Controller
+- Hold A and left joystick up and down: Move climber up and down and hold in position when let go.
+- Right Bumper: Runs trap scoring routine which hands note off to to trap mechansim and raises elevator up and shoots note out into trap if fully climbed on chain mostly centered on trap door.

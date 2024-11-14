@@ -61,7 +61,6 @@ public class IntakeAlignAndDriveToNote extends Command {
       double yawSpeed = yawPIDController.calculate(LimelightHelpers.getTX("limelight-intake"));
       double xSpeed =
           MathUtil.inverseInterpolate(triggerThreshold, 1.0, triggerTranslation.getAsDouble());
-      // xSpeed = Math.pow(xSpeed, 3.0);
       xSpeed = MathUtil.interpolate(0.25, topSpeed, xSpeed);
       if (triggerTranslation.getAsDouble() >= triggerThreshold
           && intake.isIntakeAtPosition(IntakeConstants.floorPosition)) {
@@ -75,7 +74,6 @@ public class IntakeAlignAndDriveToNote extends Command {
                 drivetrain.getRotation()));
       }
     } else {
-      // drivetrain.setControl(fieldRequest.withRotationalRate(rotation.getAsDouble()).withVelocityX(translationX.getAsDouble()).withVelocityY(translationY.getAsDouble()));
       drivetrain.runVelocity(
           ChassisSpeeds.fromFieldRelativeSpeeds(
               translationX.getAsDouble(),

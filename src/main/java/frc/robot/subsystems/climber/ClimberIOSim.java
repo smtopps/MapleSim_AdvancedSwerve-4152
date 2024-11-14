@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 /** Add your docs here. */
 public class ClimberIOSim implements ClimberIO {
   private boolean isPositionMode = true;
-  private double climberPosition;
-  private double climberPower;
+  private double climberPosition = 0.0;
+  private double climberPower = 0.0;
   private ElevatorSim climberArmSim;
   private PIDController climberController = new PIDController(0.1, 0, 0);
 
@@ -35,7 +35,12 @@ public class ClimberIOSim implements ClimberIO {
 
   @Override
   public void updateInputs(ClimberInputs inputs) {
-    climberArmSim.setInputVoltage(climberPower * 12);
+    climberController.setSetpoint(climberPosition);
+    if (isPositionMode) {
+      climberArmSim.setInputVoltage(climberController.calculate(climberArmSim.getPositionMeters()));
+    } else {
+      climberArmSim.setInputVoltage(climberPower);
+    }
     climberArmSim.update(0.02);
 
     double climberPosition =
@@ -52,16 +57,22 @@ public class ClimberIOSim implements ClimberIO {
   }
 
   public void moveClimber(double power) {
+    isPositionMode = false;
     climberPower = power * 12;
   }
 
   public void stopClimber() {
+    isPositionMode = false;
     climberPower = 0.0;
   }
 
-  public void setClimberPosition(double position) {}
+  public void setClimberPosition(double position) {
+    isPositionMode = true;
+    climberPosition = position;
+  }
 
   public void configureMotorsControllers() {
+    isPositionMode = true;
     climberPosition = 0.0;
   }
 

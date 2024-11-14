@@ -45,6 +45,9 @@ import frc.robot.commands.ShootCommands.ShootPose;
 import frc.robot.commands.ShootCommands.ShootToZone;
 import frc.robot.commands.TrapAmpCommands.AlignAmpSequence;
 import frc.robot.commands.TrapAmpCommands.AmpSequence;
+import frc.robot.commands.TrapAmpCommands.ClimberHold;
+import frc.robot.commands.TrapAmpCommands.ClimberManual;
+import frc.robot.commands.TrapAmpCommands.TrapSequence;
 import frc.robot.subsystems.ElevatorTrap.ElevatorTrap;
 import frc.robot.subsystems.ElevatorTrap.ElevatorTrapIO;
 import frc.robot.subsystems.ElevatorTrap.ElevatorTrapIOReal;
@@ -95,6 +98,7 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -217,16 +221,17 @@ public class RobotContainer {
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Configure the button bindings
-    configureButtonBindings();
+    configureDriverButtonBindings();
+    configureOperatorButtonBindings();
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
+   * Use this method to define your driver button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
+  private void configureDriverButtonBindings() {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
@@ -279,6 +284,27 @@ public class RobotContainer {
                 intake,
                 () -> -driverController.getLeftY() * DriveConstants.MAX_LINEAR_SPEED,
                 () -> -driverController.getLeftX() * DriveConstants.MAX_LINEAR_SPEED));
+  }
+
+  /**
+   * Use this method to define your operator button->command mappings. Buttons can be created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  private void configureOperatorButtonBindings() {
+    operatorController
+        .a()
+        .whileTrue(new ClimberManual(climber, () -> -operatorController.getLeftY()))
+        .onFalse(new ClimberHold(climber));
+    // operatorController.y().whileTrue(new ElevatorManual(elevatorTrap, ()->
+    // operatorController.getLeftY())).onFalse(new ElevatorHold(elevatorTrap));
+    // operatorController.x().whileTrue(new TrapManual(trap, ()-> operatorController.getLeftY()));
+    // operatorController.back().onTrue(new InstantCommand(()-> climber.resetEncoder(true),
+    // climber));
+    operatorController.rightBumper().onTrue(new TrapSequence(elevatorTrap, intake, shooter));
+    // operatorController.rightTrigger().whileTrue(new IntakeTryHarder(intake));
+    // operatorController.povCenter().whileFalse(new IntakeAmp(intake));
   }
 
   /**

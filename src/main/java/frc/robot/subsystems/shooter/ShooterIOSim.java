@@ -40,6 +40,7 @@ public class ShooterIOSim implements ShooterIO {
     if (closedLoop) {
       pid.setSetpoint(leftSetpoint);
       leftSim.setInputVoltage(
+          // ff.calculate(leftSetpoint) + pid.calculate(leftSim.getAngularVelocityRPM() / 60.0));
           ff.calculate(leftSetpoint) + pid.calculate(leftSim.getAngularVelocityRPM() / 60.0));
       pid.setSetpoint(rightSetpoint);
       rightSim.setInputVoltage(

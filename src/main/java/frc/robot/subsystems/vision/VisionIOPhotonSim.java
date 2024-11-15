@@ -24,6 +24,7 @@ import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 import org.photonvision.estimation.TargetModel;
 import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
@@ -88,8 +89,8 @@ public class VisionIOPhotonSim implements VisionIO {
     noteSim.addCamera(intakeCameraSim, robotToIntakeCamera);
 
     // Enable the raw and processed streams. These are enabled by default.
-    shooterCameraSim.enableRawStream(true);
-    intakeCameraSim.enableRawStream(true);
+    shooterCameraSim.enableRawStream(false);
+    intakeCameraSim.enableRawStream(false);
     shooterCameraSim.enableProcessedStream(true);
     intakeCameraSim.enableProcessedStream(true);
 
@@ -172,7 +173,12 @@ public class VisionIOPhotonSim implements VisionIO {
                   result.metadata.getLatencyMillis(), // 6: latency ms
                   (double) result.targets.size(), // 7: tag count
                   0.0, // 8: tag span
-                  0.0, // 9: tag dist
+                  PhotonUtils.getDistanceToPose(
+                      fieldToCamera,
+                      ShooterConstants.aprilTags
+                          .getTagPose(result.getBestTarget().fiducialId)
+                          .get()
+                          .toPose2d()), // 9: tag dist
                   result.getBestTarget().getArea() // 10: tag area
                   ));
       // Add RawFiducials
@@ -181,10 +187,10 @@ public class VisionIOPhotonSim implements VisionIO {
         pose_data.add((double) target.getFiducialId()); // 0: id
         pose_data.add(target.getYaw()); // 1: txnc
         pose_data.add(target.getPitch()); // 2: tync
-        pose_data.add(0.0); // 3: ta
+        pose_data.add(target.getArea()); // 3: ta
         pose_data.add(0.0); // 4: distToCamera
         pose_data.add(0.0); // 5: distToRobot
-        pose_data.add(0.5); // 6: ambiguity
+        pose_data.add(target.getPoseAmbiguity()); // 6: ambiguity
       }
 
       table
@@ -215,7 +221,12 @@ public class VisionIOPhotonSim implements VisionIO {
                   result.metadata.getLatencyMillis(), // 6: latency ms
                   (double) result.targets.size(), // 7: tag count
                   0.0, // 8: tag span
-                  0.0, // 9: tag dist
+                  PhotonUtils.getDistanceToPose(
+                      fieldToCamera,
+                      ShooterConstants.aprilTags
+                          .getTagPose(trackedTarget.fiducialId)
+                          .get()
+                          .toPose2d()), // 9: tag dist
                   result.getBestTarget().getArea() // 10: tag area
                   ));
       // Add RawFiducials

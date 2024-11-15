@@ -95,7 +95,7 @@ public class IntakeIOSim implements IntakeIO {
 
     // if the integral is negative, we get rid of the note
     if (intakeVoltageIntegralSinceNoteTaken < 0
-        && Units.radiansToRotations(rotationSim.getAngleRads()) < 0.4
+        && Units.radiansToRotations(rotationSim.getAngleRads()) < 0.3
         && intakeSimulation.obtainGamePieceFromIntake())
       // splits the note out by adding it on field
       SimulatedArena.getInstance()
@@ -108,8 +108,7 @@ public class IntakeIOSim implements IntakeIO {
                           new Translation2d(1.0, 0.0) // -0.4, 0
                               .rotateBy(driveTrain.getSimulatedDriveTrainPose().getRotation()))));
     else if (intakeVoltageIntegralSinceNoteTaken < 0
-        && Units.radiansToRotations(rotationSim.getAngleRads())
-            >= IntakeConstants.shootPosition - 0.01
+        && Units.radiansToRotations(rotationSim.getAngleRads()) >= 0.3
         && intakeSimulation.obtainGamePieceFromIntake()) passNoteToFlyWheelsCall.run();
   }
 

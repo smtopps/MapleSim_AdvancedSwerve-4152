@@ -25,10 +25,12 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     this.io.updateInputs(inputs, drivetrain.getPose());
     Logger.processInputs("Vision", inputs);
-    if (inputs.pose != null && inputs.tagCount > 0 && Math.toDegrees(drivetrain.getRobotRelativeSpeeds().omegaRadiansPerSecond)<720) {
+    if (inputs.pose != null
+        && inputs.tagCount > 0
+        && Math.toDegrees(drivetrain.getRobotRelativeSpeeds().omegaRadiansPerSecond) < 720) {
       double confidence;
       confidence = 2.0 / inputs.tagCount;
-      confidence = confidence + inputs.avgTagDist*0.5;
+      confidence = confidence + inputs.avgTagDist * 0.5;
       Logger.recordOutput("confidence", confidence);
       drivetrain.addVisionMeasurement(
           inputs.pose, inputs.timestampSeconds, VecBuilder.fill(confidence, confidence, 9999999));

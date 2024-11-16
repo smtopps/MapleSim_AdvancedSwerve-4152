@@ -23,7 +23,8 @@ public class AutoIntakeStop extends Command {
   public void initialize() {
     intake.setIntakePosition(IntakeConstants.stowedPosition);
     intake.setRollerSpeed(IntakeConstants.stallSpeed);
-    PPHolonomicDriveController.setRotationTargetOverride(null);
+    // PPHolonomicDriveController.setRotationTargetOverride(null);
+    PPHolonomicDriveController.clearFeedbackOverrides();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,7 +34,7 @@ public class AutoIntakeStop extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    PPHolonomicDriveController.setRotationTargetOverride(null);
+    // PPHolonomicDriveController.setRotationTargetOverride(null);
   }
 
   // Returns true when the command should end.

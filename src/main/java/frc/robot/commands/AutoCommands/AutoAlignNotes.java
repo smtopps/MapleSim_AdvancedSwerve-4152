@@ -5,23 +5,25 @@
 package frc.robot.commands.AutoCommands;
 
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.util.LimelightHelpers;
-import java.util.Optional;
 
 public class AutoAlignNotes extends Command {
   private final Drive drivetrain;
   private final Intake intake;
+  private final PIDController xController;
   /** Creates a new AutoAlign. */
   public AutoAlignNotes(Drive drivetrain, Intake intake) {
     this.drivetrain = drivetrain;
     this.intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
+
+    xController = new PIDController(0.1, 0, 0);
+    xController.setSetpoint(0.0);
   }
 
   // Called when the command is initially scheduled.
@@ -35,11 +37,16 @@ public class AutoAlignNotes extends Command {
   public void execute() {
     if (LimelightHelpers.getTV("limelight-intake")) {
       double limelighMeasurement = LimelightHelpers.getTX("limelight-intake");
-      limelighMeasurement = MathUtil.inverseInterpolate(-31.25, 31.25, limelighMeasurement);
-      limelighMeasurement = MathUtil.interpolate(-20, 20, limelighMeasurement);
-      double rotation = drivetrain.getPose().getRotation().getDegrees() - limelighMeasurement;
-      Rotation2d rotationTarget = Rotation2d.fromDegrees(rotation);
-      PPHolonomicDriveController.setRotationTargetOverride(() -> Optional.of(rotationTarget));
+      PPHolonomicDriveController.overrideRotationFeedback(
+          () -> xController.calculate(limelighMeasurement));
+      // PPHolonomicDriveController.overrideXFeedback(() ->
+      // xController.calculate(limelighMeasurement));
+      // limelighMeasurement = MathUtil.inverseInterpolate(-31.25, 31.25, limelighMeasurement);
+      // limelighMeasurement = MathUtil.interpolate(-20, 20, limelighMeasurement);
+      // double rotation = drivetrain.getPose().getRotation().getDegrees() - limelighMeasurement;
+      // Rotation2d rotationTarget = Rotation2d.fromDegrees(rotation);
+      // PPHolonomicDriveController.setRotationTargetOverride(() -> Optional.of(rotationTarget));
+
     }
   }
 

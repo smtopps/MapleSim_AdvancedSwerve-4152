@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoCommands.AutoAlignNotes;
 import frc.robot.commands.AutoCommands.AutoIntakeStart;
@@ -212,8 +211,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("startIntake", new AutoIntakeStart(intake));
     NamedCommands.registerCommand("stopIntake", new AutoIntakeStop(intake));
     NamedCommands.registerCommand("autoShoot", new AutoShootPose(drive, shooter, intake));
-    NamedCommands.registerCommand("autoIntake", new PrintCommand("autoIntake"));
-    NamedCommands.registerCommand("autoShootAlign", new PrintCommand("autoShootAlign"));
     NamedCommands.registerCommand("autoAlign", new AutoAlignNotes(drive, intake));
     NamedCommands.registerCommand("deflect", new AutoShootDeflect(shooter, intake, elevatorTrap));
     NamedCommands.registerCommand("manuelShoot", new AutoManualShoot(shooter, intake));
@@ -313,7 +310,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.get();
+    Command autoCommand = autoChooser.get();
+    return autoCommand;
   }
 
   public void updateSimulationField() {

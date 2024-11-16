@@ -90,6 +90,7 @@ public class IntakeIOSim implements IntakeIO {
     // if the there is note, we do an integral to the voltage to approximate the position of the
     // note in the intake
     if (inputs.noteDetected) intakeVoltageIntegralSinceNoteTaken += 0.16 * rollerSpeed;
+    else if(inputs.noteDetected && rollerSpeed >= 0) intakeVoltageIntegralSinceNoteTaken = 0;
     // if the note is gone, we clear the integral
     else intakeVoltageIntegralSinceNoteTaken = 0.0;
 

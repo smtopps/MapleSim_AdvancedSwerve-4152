@@ -15,6 +15,8 @@ public interface IntakeIO {
     public boolean noteDetected;
     public Pose3d intakePose;
     public double intakeRotation;
+    public double intakeVoltageIntegralSinceNoteTaken;
+    public double rollerSpeed;
   }
 
   default void configureRotationMotor() {}

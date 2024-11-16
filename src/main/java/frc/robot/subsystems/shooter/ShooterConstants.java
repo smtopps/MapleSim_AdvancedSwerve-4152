@@ -30,7 +30,7 @@ public class ShooterConstants {
           .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
           .withSensorToMechanismRatio(gearRatio);
 
-  public static final double shootingRPS = 70;
+  public static final double shootingRPS = 67; // 70
   public static final double spinFactor = 0.05;
   public static final double speedThreshold = 1.5;
   public static final double deflectRPS = 67;

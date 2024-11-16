@@ -22,7 +22,7 @@ public class AutoAlignNotes extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
 
-    xController = new PIDController(0.1, 0, 0);
+    xController = new PIDController(0.05, 0, 0);
     xController.setSetpoint(0.0);
   }
 

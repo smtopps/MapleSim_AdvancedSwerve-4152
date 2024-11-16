@@ -99,7 +99,7 @@ public class ShootPose extends Command {
         timeStampLock = false;
       }
 
-      if (!timeStampLock && Timer.getFPGATimestamp() - shootTime > 0.2) {
+      if (!timeStampLock && Timer.getFPGATimestamp() - shootTime > 1.2) {
         finished = true;
       }
     }

@@ -22,7 +22,7 @@ public class AutoAlignNotes extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
 
-    xController = new PIDController(0.05, 0, 0);
+    xController = new PIDController(0.03, 0, 0);
     xController.setSetpoint(0.0);
   }
 
@@ -37,10 +37,10 @@ public class AutoAlignNotes extends Command {
   public void execute() {
     if (LimelightHelpers.getTV("limelight-intake")) {
       double limelighMeasurement = LimelightHelpers.getTX("limelight-intake");
-      PPHolonomicDriveController.overrideRotationFeedback(
-          () -> xController.calculate(limelighMeasurement));
-      // PPHolonomicDriveController.overrideXFeedback(() ->
-      // xController.calculate(limelighMeasurement));
+      // PPHolonomicDriveController.overrideRotationFeedback(
+      //  () -> xController.calculate(limelighMeasurement));
+      PPHolonomicDriveController.overrideYFeedback(
+          () -> xController.calculate(-limelighMeasurement));
       // limelighMeasurement = MathUtil.inverseInterpolate(-31.25, 31.25, limelighMeasurement);
       // limelighMeasurement = MathUtil.interpolate(-20, 20, limelighMeasurement);
       // double rotation = drivetrain.getPose().getRotation().getDegrees() - limelighMeasurement;

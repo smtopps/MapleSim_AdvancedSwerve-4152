@@ -53,7 +53,7 @@ public class VisionIOPhotonSim implements VisionIO {
   Translation3d robotToIntakeCameraTrl = new Translation3d(-0.082409, 0, 0.574454);
   // and pitched 38 degrees up and 180 deg around
   Rotation3d robotToShooterCameraRot = new Rotation3d(0, Math.toRadians(-33), Math.toRadians(180));
-  Rotation3d robotToIntakeCameraRot = new Rotation3d(0, Math.toRadians(10), 0);
+  Rotation3d robotToIntakeCameraRot = new Rotation3d(0, Math.toRadians(15), 0);
   Transform3d robotToShooterCamera =
       new Transform3d(robotToShooterCameraTrl, robotToShooterCameraRot);
   Transform3d robotToIntakeCamera = new Transform3d(robotToIntakeCameraTrl, robotToIntakeCameraRot);
@@ -68,7 +68,7 @@ public class VisionIOPhotonSim implements VisionIO {
     SimCameraProperties ll3CameraProperties = new SimCameraProperties();
     // A 640 x 480 camera with a 100 degree diagonal FOV.
     ll3GCameraProperties.setCalibration(1280, 800, Rotation2d.fromDegrees(97.7));
-    ll3CameraProperties.setCalibration(1280, 800, Rotation2d.fromDegrees(97.7));
+    ll3CameraProperties.setCalibration(640, 480, Rotation2d.fromDegrees(79.5));
     // A 640 x 480 camera with a 100 degree diagonal FOV.
     ll3GCameraProperties.setCalibError(0.3, 0.10);
     ll3CameraProperties.setCalibError(0.3, 0.10);
@@ -89,15 +89,15 @@ public class VisionIOPhotonSim implements VisionIO {
     noteSim.addCamera(intakeCameraSim, robotToIntakeCamera);
 
     // Enable the raw and processed streams. These are enabled by default.
-    shooterCameraSim.enableRawStream(true);
-    intakeCameraSim.enableRawStream(true);
-    shooterCameraSim.enableProcessedStream(true);
-    intakeCameraSim.enableProcessedStream(true);
+    shooterCameraSim.enableRawStream(false);
+    intakeCameraSim.enableRawStream(false);
+    shooterCameraSim.enableProcessedStream(false);
+    intakeCameraSim.enableProcessedStream(false);
 
     // Enable drawing a wireframe visualization of the field to the camera streams.
     // This is extremely resource-intensive and is disabled by default.
-    shooterCameraSim.enableDrawWireframe(true);
-    intakeCameraSim.enableDrawWireframe(true);
+    shooterCameraSim.enableDrawWireframe(false);
+    intakeCameraSim.enableDrawWireframe(false);
   }
 
   @Override

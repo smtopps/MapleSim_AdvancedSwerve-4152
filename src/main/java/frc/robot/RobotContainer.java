@@ -73,7 +73,7 @@ import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.GyroSimulation;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
-import org.ironmaple.simulation.drivesims.SwerveModuleSimulation.DRIVE_WHEEL_TYPE;
+import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -130,25 +130,21 @@ public class RobotContainer {
         /* Sim robot, instantiate physics sim IO implementations */
 
         /* create simulation for pigeon2 IMU (different IMUs have different measurement errors) */
-        final GyroSimulation gyroSimulation = GyroSimulation.createPigeon2();
+        final GyroSimulation gyroSimulation = GyroSimulation.getPigeon2().get();
+        /* create simulation for MK4i swerve modules */
+        final DriveTrainSimulationConfig driveConfig =
+            new DriveTrainSimulationConfig(
+                62,
+                Units.inchesToMeters(34.875),
+                Units.inchesToMeters(32.875),
+                Units.inchesToMeters(22.75),
+                Units.inchesToMeters(20.75),
+                SwerveModuleSimulation.getMark4i(
+                    DCMotor.getKrakenX60(1), DCMotor.getFalcon500(1), 50, 1.2, 2),
+                () -> gyroSimulation);
         /* create a swerve drive simulation */
         this.swerveDriveSimulation =
-            new SwerveDriveSimulation(
-                62,
-                Units.inchesToMeters(20.75),
-                Units.inchesToMeters(22.75),
-                Units.inchesToMeters(32.875),
-                Units.inchesToMeters(34.875),
-                SwerveModuleSimulation.getMark4i( // creates a mark4i module
-                    DCMotor.getKrakenX60(1), // drive motor is a Kraken x60
-                    DCMotor.getFalcon500(1), // steer motor is a Falcon 500
-                    50, // current limit: 50 Amps
-                    DRIVE_WHEEL_TYPE.RUBBER, // rubber wheels
-                    2 // l2 gear ratio
-                    ),
-                gyroSimulation,
-                new Pose2d( // initial starting pose on field, set it to where-ever you want
-                    3, 3, new Rotation2d()));
+            new SwerveDriveSimulation(driveConfig, new Pose2d(3, 3, new Rotation2d()));
         SimulatedArena.getInstance()
             .addDriveTrainSimulation(swerveDriveSimulation); // register the drive train simulation
 
@@ -310,6 +306,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    SimulatedArena.getInstance().resetFieldForAuto();
     Command autoCommand = autoChooser.get();
     return autoCommand;
   }

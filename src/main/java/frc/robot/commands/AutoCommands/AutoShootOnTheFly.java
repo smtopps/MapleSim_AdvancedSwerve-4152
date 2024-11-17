@@ -41,6 +41,7 @@ public class AutoShootOnTheFly extends Command {
   @Override
   public void initialize() {
     shooter.setShooterSpeeds(speed, spin);
+    intake.setIntakeRollerCurrentLimit(100);
     intake.setIntakePosition(IntakeConstants.shootPosition);
     targetTag = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? 7 : 4;
     targetPose = ShooterConstants.aprilTags.getTagPose(targetTag).get().toPose2d();
@@ -73,6 +74,7 @@ public class AutoShootOnTheFly extends Command {
   @Override
   public void end(boolean interrupted) {
     intake.setIntakePosition(IntakeConstants.stowedPosition);
+    intake.setIntakeRollerCurrentLimit(IntakeConstants.rollerMotorCurrentLimit);
     intake.setRollerSpeed(IntakeConstants.stallSpeed);
     finished = false;
   }

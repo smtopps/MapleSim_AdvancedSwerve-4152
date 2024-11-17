@@ -89,8 +89,8 @@ public class VisionIOPhotonSim implements VisionIO {
     noteSim.addCamera(intakeCameraSim, robotToIntakeCamera);
 
     // Enable the raw and processed streams. These are enabled by default.
-    shooterCameraSim.enableRawStream(false);
-    intakeCameraSim.enableRawStream(false);
+    shooterCameraSim.enableRawStream(true);
+    intakeCameraSim.enableRawStream(true);
     shooterCameraSim.enableProcessedStream(true);
     intakeCameraSim.enableProcessedStream(true);
 

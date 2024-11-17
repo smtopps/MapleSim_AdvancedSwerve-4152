@@ -50,6 +50,7 @@ public class AutoShootPose extends Command {
   @Override
   public void initialize() {
     shooter.setShooterSpeeds(ShooterConstants.shootingRPS, ShooterConstants.spinFactor);
+    intake.setIntakeRollerCurrentLimit(100);
     intake.setIntakePosition(IntakeConstants.shootPosition);
     targetTag = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? 7 : 4;
     yawController.setSetpoint(180.0);
@@ -103,6 +104,7 @@ public class AutoShootPose extends Command {
   @Override
   public void end(boolean interrupted) {
     intake.setIntakePosition(IntakeConstants.stowedPosition);
+    intake.setIntakeRollerCurrentLimit(IntakeConstants.rollerMotorCurrentLimit);
     intake.setRollerSpeed(IntakeConstants.stallSpeed);
     finished = false;
   }

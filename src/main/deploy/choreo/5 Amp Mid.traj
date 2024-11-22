@@ -385,9 +385,7 @@
   "splits":[0,30,113,202]
  },
  "events":[
-   {"name":"Intake A", "from":{"target":1, "targetTimestamp":0.7046013544661568, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"sequential", "data":{"commands":[
-       {"type":"named", "data":{"name":"startIntake"}},
-       {"type":"named", "data":{"name":"autoAlign"}}]}}},
+   {"name":"Align A", "from":{"target":1, "targetTimestamp":0.7046013544661568, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"autoAlign"}}},
    {"name":"Intake D", "from":{"target":3, "targetTimestamp":2.6465774748845474, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"startIntake"}}},
    {"name":"Align D", "from":{"target":3, "targetTimestamp":2.6465774748845474, "offset":{"exp":"0.2 s", "val":0.2}}, "event":{"type":"named", "data":{"name":"autoAlign"}}},
    {"name":"Stop A", "from":{"target":1, "targetTimestamp":0.7046013544661568, "offset":{"exp":"0.5 s", "val":0.5}}, "event":{"type":"named", "data":{"name":"stopIntake"}}},
@@ -397,5 +395,6 @@
    {"name":"Stop E", "from":{"target":8, "targetTimestamp":9.104286181357432, "offset":{"exp":"0.3 s", "val":0.3}}, "event":{"type":"named", "data":{"name":"stopIntake"}}},
    {"name":"Intake F", "from":{"target":11, "targetTimestamp":13.198344048775184, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"startIntake"}}},
    {"name":"Align F", "from":{"target":11, "targetTimestamp":13.198344048775184, "offset":{"exp":"0.2 s", "val":0.2}}, "event":{"type":"named", "data":{"name":"autoAlign"}}},
-   {"name":"Stop F", "from":{"target":12, "targetTimestamp":14.54441253596424, "offset":{"exp":"0.3 s", "val":0.3}}, "event":{"type":"named", "data":{"name":"stopIntake"}}}]
+   {"name":"Stop F", "from":{"target":12, "targetTimestamp":14.54441253596424, "offset":{"exp":"0.3 s", "val":0.3}}, "event":{"type":"named", "data":{"name":"stopIntake"}}},
+   {"name":"Intake A", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"startIntake"}}}]
 }

@@ -8,9 +8,12 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -19,8 +22,8 @@ import edu.wpi.first.math.util.Units;
 /** Add your docs here. */
 public class ElevatorTrapIOReal implements ElevatorTrapIO {
   private TalonFX elevatorMotor = new TalonFX(ElevatorConstants.leftElevatorMotorID);
-  private final CANSparkFlex trapMotor =
-      new CANSparkFlex(TrapConstants.trapMotorID, MotorType.kBrushless);
+  private final SparkFlex trapMotor =
+      new SparkFlex(TrapConstants.trapMotorID, MotorType.kBrushless);
 
   private final MotionMagicVoltage magicRequest = new MotionMagicVoltage(0);
 
@@ -75,9 +78,14 @@ public class ElevatorTrapIOReal implements ElevatorTrapIO {
   }
 
   public void configureTrapMotor() {
-    trapMotor.restoreFactoryDefaults();
-    trapMotor.setIdleMode(IdleMode.kBrake);
-    trapMotor.setSmartCurrentLimit(TrapConstants.trapMotorCurrentLimit);
+    trapMotor.configure(
+        new SparkFlexConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    SparkFlexConfig sparkFlexConfigs = new SparkFlexConfig();
+    sparkFlexConfigs
+        .idleMode(IdleMode.kBrake)
+        .smartCurrentLimit(TrapConstants.trapMotorCurrentLimit);
+    trapMotor.configure(
+        sparkFlexConfigs, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     trapMotor.stopMotor();
   }
 

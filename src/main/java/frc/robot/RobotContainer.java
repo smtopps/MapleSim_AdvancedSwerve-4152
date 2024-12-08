@@ -57,8 +57,8 @@ import frc.robot.subsystems.climber.ClimberIOReal;
 import frc.robot.subsystems.climber.ClimberIOSim;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
+import frc.robot.subsystems.intake.IntakeIOTalonFXSim;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterIO;
@@ -114,7 +114,7 @@ public class RobotContainer {
         /* Subsystems */
         drive =
             new Drive(
-                new GyroIOPigeon2(true),
+                new GyroIOPigeon2(),
                 new ModuleIOTalonFX(0),
                 new ModuleIOTalonFX(1),
                 new ModuleIOTalonFX(2),
@@ -170,7 +170,7 @@ public class RobotContainer {
 
         this.intake =
             new Intake(
-                new IntakeIOSim(
+                new IntakeIOTalonFXSim(
                     swerveDriveSimulation, // attach the intake simulation to swerve drive
                     () ->
                         shooterIOSim.shootNoteWithCurrentRPM(
